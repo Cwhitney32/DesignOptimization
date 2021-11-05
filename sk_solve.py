@@ -1,13 +1,9 @@
 import numpy as np
 
 
-def line_search_grg(f,dfdd,sk,dk):
+def sk_solve(h,dk,sk):
    
     alpha=1
-
-    b=0.5
-
-    t=0.3
 
     f1=func(x+alpha*direction)
 
@@ -22,5 +18,5 @@ def line_search_grg(f,dfdd,sk,dk):
         alpha=alpha*rho
     
 
-    return alpha
+    return sk_new
     
