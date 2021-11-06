@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def line_search_grg(func,dfdd,sk,dk,phps,phpd):
+def line_search_grg(func,dfdd,sk,dk,phps,php
    
     alpha=1
 
