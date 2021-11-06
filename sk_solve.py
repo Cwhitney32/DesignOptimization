@@ -1,22 +1,17 @@
 import numpy as np
 
 
-def sk_solve(h,dk,sk):
+def sk_solve(h,dk,sk,e,phps):
    
-    alpha=1
+    h_sol=h(sk,dk)+phps(sk)*sk
 
-    f1=func(x+alpha*direction)
-
-    f2=func(x)+t*alpha*np.matmul(np.transpose(grad),direction)
-
-    while f1>f2:
-
-        f1=func(x+alpha*direction)
-
-        f2=func(x)+t*alpha*np.matmul(np.transpose(grad),direction)
+    while h_sol>e:
     
-        alpha=alpha*rho
-    
+        phps_sol=phps(sk)
 
-    return sk_new
+        sk=sk-np.linalg.inv((phps(sk))*h(sk)
+
+        h_sol = h(sk,dk)
+
+return sk
     

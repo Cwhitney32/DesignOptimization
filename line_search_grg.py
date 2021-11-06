@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def line_search_grg(f,dfdd,sk,dk):
+def line_search_grg(func,dfdd,sk,dk,phps,phpd):
    
     alpha=1
 
@@ -9,18 +9,25 @@ def line_search_grg(f,dfdd,sk,dk):
 
     t=0.3
 
-    f1=func(x+alpha*direction)
+    x_f=dk-alpha*dfdd(dk),sk+alpha*np.transpose(np.matmul(np.matmul(np.linalg.inv(phps(dk)),phpd(dk)),np.transponse(dfdd(dk))))
 
-    f2=func(x)+t*alpha*np.matmul(np.transpose(grad),direction)
+    f=func(x_f)
 
-    while f1>f2:
+    x_phi=[dk,sk]
 
-        f1=func(x+alpha*direction)
+    phi=func(x_phi)+t*alpha*dfdd(dk)
 
-        f2=func(x)+t*alpha*np.matmul(np.transpose(grad),direction)
-    
-        alpha=alpha*rho
-    
+    while f>phi:
+
+        alpha=alpha*b
+
+        x_f=dk-alpha*dfdd(dk),sk+alpha*np.transpose(np.matmul(np.matmul(np.linalg.inv(phps(dk)),phpd(dk)),np.transponse(dfdd(dk))))
+
+        f=func(x_f)
+
+        x_phi=[dk,sk]
+
+        phi=func(x_phi)+t*alpha*dfdd(dk)
 
     return alpha
     
