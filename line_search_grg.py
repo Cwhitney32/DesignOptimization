@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def line_search_grg(func,dfdd,sk,dk,phps,php
+def line_search_grg(func,dfdd,sk,dk,phps,phpd):
    
     alpha=1
 
@@ -9,11 +9,14 @@ def line_search_grg(func,dfdd,sk,dk,phps,php
 
     t=0.3
 
-    x_f=dk-alpha*dfdd(dk),sk+alpha*np.transpose(np.matmul(np.matmul(np.linalg.inv(phps(dk)),phpd(dk)),np.transponse(dfdd(dk))))
+    f_sk=sk+alpha*np.transpose(np.matmul(np.matmul(np.linalg.inv(phps(np.concatenate([sk,dk]))),phpd(np.concatenate([sk,dk]))),np.transponse(dfdd(np.concatenate([sk,dk])))))
+    f_dk=dk-alpha*dfdd(dk)
+
+    x_f=np.concatenate([f_sk,f_dk])
 
     f=func(x_f)
 
-    x_phi=[dk,sk]
+    x_phi=np.concatenate([sk,dk])
 
     phi=func(x_phi)+t*alpha*dfdd(dk)
 
@@ -21,11 +24,14 @@ def line_search_grg(func,dfdd,sk,dk,phps,php
 
         alpha=alpha*b
 
-        x_f=dk-alpha*dfdd(dk),sk+alpha*np.transpose(np.matmul(np.matmul(np.linalg.inv(phps(dk)),phpd(dk)),np.transponse(dfdd(dk))))
+        f_sk=sk+alpha*np.transpose(np.matmul(np.matmul(np.linalg.inv(phps(np.concatenate([sk,dk]))),phpd(np.concatenate([sk,dk]))),np.transponse(dfdd(np.concatenate([sk,dk])))))
+        f_dk=dk-alpha*dfdd(dk)
+
+        x_f=np.concatenate([f_sk,f_dk])
 
         f=func(x_f)
 
-        x_phi=[dk,sk]
+        x_phi=np.concatenate([sk,dk])
 
         phi=func(x_phi)+t*alpha*dfdd(dk)
 
