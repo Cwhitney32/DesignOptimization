@@ -1,22 +1,20 @@
 import numpy as np
+import math as m
 import matplotlib.pyplot as plt
 from line_search_grg import*
 from sk_solve import*
 
-alpha=1
-conv=1
-error=1
 
 sol=[]
 err=[]
-itt=[]
-
+itt=0
+conv=1
 
 def f(x):
     return x[0]**2+x[1]**2+x[2]**2
 
 def h(x):
-    return np.array([x[0]**2/4+x[1]**2/5+x[2]**2/25-1, x[0]+x[1]-x[2]])
+    return np.array( [(x[0]**2 /4) + (x[1]**2 /5) + (x[2]**2 /25) -1, x[0] + x[1] - x[2]])
 
 def pfpd(x):
     return 2*x[2]
@@ -38,14 +36,15 @@ k=0
 e=10e-3
 
 #state variables x1 x2
-sk = np.array([1,2])
+sk = np.array([.5/(m.sqrt(1/4)+m.sqrt(1/25)),(.5/(m.sqrt(1/5)+m.sqrt(1/25)))])
 
 #decision variables x3
-dk = np.array([3])
+dk = np.array([.5/(m.sqrt(1/4)+m.sqrt(1/25))+.5/(m.sqrt(1/5)+m.sqrt(1/25))])
 
 #define x argument
 x0=np.concatenate([sk,dk])
 
+check=h(np.concatenate([sk,dk]))
 dfdd=dfdd_eqn(x0)
 
 while conv >= e:
@@ -58,9 +57,9 @@ while conv >= e:
 
     sk=sk_solve(h,dk,sk,e,phps)
 
-    sol.append(float(diff))
+    sol.append(sk)
 
-    conv=np.linalg.norm(dfdd(sk))
+    conv=np.linalg.norm(dfdd_eqn(np.concatenate([sk,dk])))
     
-error=abs(func(sol)-func(xstar))
-
+    itt=itt+1
+    print(itt)
