@@ -18,7 +18,7 @@ def line_search_grg(func,dfdd,sk,dk,phps,phpd):
 
     x_phi=np.concatenate([sk,dk])
 
-    phi=func(x_phi)+t*alpha*dfdd(dk)
+    phi=func(x_phi)+t*alpha*dfdd(np.concatenate([sk,dk]))
 
     while f>phi:
 
@@ -33,7 +33,7 @@ def line_search_grg(func,dfdd,sk,dk,phps,phpd):
 
         x_phi=np.concatenate([sk,dk])
 
-        phi=func(x_phi)+t*alpha*dfdd(dk)
+        phi=func(x_phi)+t*alpha*dfdd(np.concatenate([sk,dk]))
 
     return alpha
     

@@ -26,25 +26,25 @@ def phps(x):
     return np.array([[(1/2)*x[0], 1],[(2/5)*x[1], 1]])
 
 def phpd(x):
-    return np.array([(2/25)*x[2], 1])
+    return np.array([(2/25)*x[2], -1])
 
 def dfdd_eqn(x):
-    return pfpd(x0)-np.matmul(np.matmul(pfps(x0),np.linalg.inv(phps(x0))),phpd(x0))
+    return pfpd(x)-np.matmul(np.matmul(pfps(x),np.linalg.inv(phps(x))),phpd(x))
 
 k=0
-
 e=10e-3
 
 #state variables x1 x2
-sk = np.array([.5/(m.sqrt(1/4)+m.sqrt(1/25)),(.5/(m.sqrt(1/5)+m.sqrt(1/25)))])
+sk = np.array([(8/7),(1/(1+m.sqrt(5)))])
 
 #decision variables x3
-dk = np.array([.5/(m.sqrt(1/4)+m.sqrt(1/25))+.5/(m.sqrt(1/5)+m.sqrt(1/25))])
+dk = np.array([(8/7)+(1/(1+m.sqrt(5)))])
 
 #define x argument
 x0=np.concatenate([sk,dk])
 
 check=h(np.concatenate([sk,dk]))
+
 dfdd=dfdd_eqn(x0)
 
 while conv >= e:
@@ -57,9 +57,14 @@ while conv >= e:
 
     sk=sk_solve(h,dk,sk,e,phps)
 
-    sol.append(sk)
+    solv=dfdd_eqn(np.concatenate([sk,dk]))
 
-    conv=np.linalg.norm(dfdd_eqn(np.concatenate([sk,dk])))
+    conv=np.linalg.norm(solv)
+
+    sol.append(conv)
     
     itt=itt+1
     print(itt)
+print(np.concatenate([sk,dk]))
+
+plt.plot(sol)
